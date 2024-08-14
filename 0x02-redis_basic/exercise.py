@@ -31,5 +31,4 @@ class Cache:
         '''Retrieves a value from a Redis data storage.
         '''
         data = self._redis.get(key)
-        # print(data)
         return fn(data) if fn is not None else data
