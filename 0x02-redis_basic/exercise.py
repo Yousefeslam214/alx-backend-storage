@@ -20,4 +20,16 @@ class Cache:
         '''Stores a value in a Redis data storage and returns the key.'''
         data_key = str(uuid.uuid4())
         self._redis.set(data_key, data)
+        # print(data_key)
         return data_key
+
+    def get(
+            self,
+            key: str,
+            fn: Callable = None,
+            ) -> Union[str, bytes, int, float]:
+        '''Retrieves a value from a Redis data storage.
+        '''
+        data = self._redis.get(key)
+        # print(data)
+        return fn(data) if fn is not None else data
