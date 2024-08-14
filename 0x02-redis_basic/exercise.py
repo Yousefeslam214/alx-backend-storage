@@ -7,6 +7,20 @@ import redis
 import uuid
 
 
+def count_calls(method: Callable) -> Callable:
+    '''Tracks the number of calls made to a method in a Cache class.
+    '''
+    @wraps(method)
+    def wrapper(self, *args, **kwds) -> Any:
+        '''returns the given method after incrementing its call counter.
+        '''
+        # print('Calling decorated function')
+        if isinstance(self._redis, redis.Redis):
+            self._redis.incr(method.__qualname__)
+        return method(self, *args, **kwds)
+    return wrapper
+
+
 class Cache:
     '''Represents an object for storing data in a Redis data storage.
     '''
@@ -14,7 +28,7 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb(True)
 
-    # @call_history
+    @call_history
     # @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         '''Stores a value in a Redis data storage and returns the key.'''
