@@ -10,8 +10,8 @@ import uuid
 class Cache:
     '''Represents an object for storing data in a Redis data storage.
     '''
-    def __init__(self)-> None:
-        self._redis= redis.Redis()
+    def __init__(self) -> None:
+        self._redis = redis.Redis()
         self._redis.flushdb(True)
 
     @call_history
